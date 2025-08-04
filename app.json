@@ -15,6 +15,17 @@
       ]
     ],
     "name": "fit-app",
-    "slug": "fit-app"
+    "slug": "fit-app",
+    "extra": {
+      "router": {
+        "origin": "https://n"
+      },
+      "eas": {
+        "projectId": "4565f938-ca1f-4e60-8a71-6c2b0ffec9a2"
+      }
+    },
+    "android": {
+      "package": "com.chidough14.fitapp"
+    }
   }
 }

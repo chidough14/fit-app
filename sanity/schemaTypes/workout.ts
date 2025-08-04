@@ -1,4 +1,4 @@
-import type { Rule } from '@sanity/types';
+import type {Rule} from '@sanity/types'
 
 export default {
   name: 'workout',
@@ -10,19 +10,19 @@ export default {
       title: 'User ID',
       type: 'string',
       description: "Clerk user's ID",
-      validation: (Rule: Rule) => Rule.required()
+      validation: (Rule: Rule) => Rule.required(),
     },
     {
       name: 'date',
       title: 'Date',
       type: 'datetime',
-      validation: (Rule: Rule) => Rule.required()
+      validation: (Rule: Rule) => Rule.required(),
     },
     {
       name: 'duration',
       title: 'Duration (secs)',
       type: 'number',
-      validation: (Rule: Rule) => Rule.required().min(0)
+      validation: (Rule: Rule) => Rule.required().min(0),
     },
     {
       name: 'exercises',
@@ -36,8 +36,8 @@ export default {
               name: 'exercise',
               title: 'Exercise',
               type: 'reference',
-              to: [{ type: 'exercise' }],
-              validation: (Rule: Rule) => Rule.required()
+              to: [{type: 'exercise'}],
+              validation: (Rule: Rule) => Rule.required(),
             },
             {
               name: 'sets',
@@ -51,13 +51,13 @@ export default {
                       name: 'reps',
                       title: 'Reps',
                       type: 'number',
-                      validation: (Rule: Rule) => Rule.required().min(1)
+                      validation: (Rule: Rule) => Rule.required().min(1),
                     },
                     {
                       name: 'weight',
                       title: 'Weight',
                       type: 'number',
-                      validation: (Rule: Rule) => Rule.min(0)
+                      validation: (Rule: Rule) => Rule.min(0),
                     },
                     {
                       name: 'weightUnit',
@@ -65,19 +65,48 @@ export default {
                       type: 'string',
                       options: {
                         list: [
-                          { title: 'lbs', value: 'lbs' },
-                          { title: 'kg', value: 'kg' }
-                        ]
+                          {title: 'lbs', value: 'lbs'},
+                          {title: 'kg', value: 'kg'},
+                        ],
                       },
-                      validation: (Rule: Rule) => Rule.required()
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
+                      validation: (Rule: Rule) => Rule.required(),
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ],
 }
+
+// export default {
+//   name: 'workout',
+//   type: 'document',
+//   title: 'Workout',
+//   fields: [
+//     {
+//       name: 'userId',
+//       type: 'string',
+//       title: 'User ID',
+//     },
+//     {
+//       name: 'date',
+//       type: 'datetime',
+//       title: 'Workout Date',
+//     },
+//     {
+//       name: 'duration',
+//       type: 'number',
+//       title: 'Duration (seconds)',
+//     },
+//     {
+//       name: 'exercises',
+//       type: 'array',
+//       title: 'Exercises',
+//       of: [{type: 'exerciseEntry'}],
+//     },
+//   ],
+// }

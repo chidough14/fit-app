@@ -13,6 +13,26 @@
  */
 
 // Source: schema.json
+export type Set = {
+  _type: "set";
+  reps?: number;
+  weight?: number;
+  weightUnit?: "kg" | "lbs";
+};
+
+export type ExerciseEntry = {
+  _type: "exerciseEntry";
+  exercise?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "exercise";
+  };
+  sets?: Array<{
+    _key: string;
+  } & Set>;
+};
+
 export type Workout = {
   _id: string;
   _type: "workout";
@@ -182,8 +202,16 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = Workout | Exercise | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = Set | ExerciseEntry | Workout | Exercise | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ../src/app/(app)/(tabs)/active-workout.tsx
+// Variable: findExerciseQuery
+// Query: *[_type == "exercise" && name == $name][0] {  _id,  name}
+export type FindExerciseQueryResult = {
+  _id: string;
+  name: string | null;
+} | null;
+
 // Source: ../src/app/(app)/(tabs)/exercises.tsx
 // Variable: exercisesQuery
 // Query: *[_type == "exercise"] {  _id,  name,  description,  difficulty,  image,  videoUrl,  isActive }
@@ -234,11 +262,10 @@ export type GetWorkoutsQueryResult = Array<{
 
 // Source: ../src/app/(app)/(tabs)/history/workout-record.tsx
 // Variable: getWorkoutRecordQuery
-// Query: *[_type == "workout" && _id == $workoutId][0] {  _id,  _type,  _ceatedAt,  date,  duration,  exercises[] {    exercise-> {      _id,      name,      description    },    sets[] {      reps,      weight,      weightUnit,      _key,      _type    },    _key,    _type  }}
+// Query: *[_type == "workout" && _id == $workoutId][0] {  _id,  _type,  date,  duration,  exercises[] {    exercise-> {      _id,      name,      description    },    sets[] {      reps,      weight,      weightUnit,      _key,      _type    },    _key,    _type  }}
 export type GetWorkoutRecordQueryResult = {
   _id: string;
   _type: "workout";
-  _ceatedAt: null;
   date: string | null;
   duration: number | null;
   exercises: Array<{
@@ -291,9 +318,10 @@ export type SingleExerciseQueryResult = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
+    "*[_type == \"exercise\" && name == $name][0] {\n  _id,\n  name\n}": FindExerciseQueryResult;
     "*[_type == \"exercise\"] {\n  _id,\n  name,\n  description,\n  difficulty,\n  image,\n  videoUrl,\n  isActive\n }": ExercisesQueryResult;
     "*[_type == \"workout\" && userId == $userId] | order(date desc){\n  _id,\n  date,\n  duration,\n  exercises[] {\n    exercise-> {\n      _id,\n      name\n    },\n    sets[] {\n      reps,\n      weight,\n      weightUnit,\n      _key,\n      _type\n    },\n    _key,\n    _type\n  }\n}": GetWorkoutsQueryResult;
-    "*[_type == \"workout\" && _id == $workoutId][0] {\n  _id,\n  _type,\n  _ceatedAt,\n  date,\n  duration,\n  exercises[] {\n    exercise-> {\n      _id,\n      name,\n      description\n    },\n    sets[] {\n      reps,\n      weight,\n      weightUnit,\n      _key,\n      _type\n    },\n    _key,\n    _type\n  }\n}": GetWorkoutRecordQueryResult;
+    "*[_type == \"workout\" && _id == $workoutId][0] {\n  _id,\n  _type,\n  date,\n  duration,\n  exercises[] {\n    exercise-> {\n      _id,\n      name,\n      description\n    },\n    sets[] {\n      reps,\n      weight,\n      weightUnit,\n      _key,\n      _type\n    },\n    _key,\n    _type\n  }\n}": GetWorkoutRecordQueryResult;
     "*[_type == \"exercise\" && _id == $id][0]": SingleExerciseQueryResult;
   }
 }

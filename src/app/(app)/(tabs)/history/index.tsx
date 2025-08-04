@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {ActivityIndicator, RefreshControl, ScrollView, Text, TouchableOpacity, View} from "react-native";
+import {ActivityIndicator, RefreshControl, ScrollView, StatusBar, Text, TouchableOpacity, View} from "react-native";
 import {SafeAreaView} from 'react-native-safe-area-context'
 import {client} from "@/lib/sanity/client";
 import {defineQuery} from "groq";
@@ -9,8 +9,10 @@ import {useLocalSearchParams, useRouter} from "expo-router";
 import {formatDuration} from "../../../../../lib/utils/utils";
 import {Ionicons} from "@expo/vector-icons";
 import exercise from "../../../../../sanity/schemaTypes/exercise";
+import {useFocusEffect} from "@react-navigation/native";
+import {useCallback} from "react";
 
-const getWorkoutsQuery = defineQuery(`*[_type == "workout" && userId == $userId] | order(date desc){
+export const getWorkoutsQuery = defineQuery(`*[_type == "workout" && userId == $userId] | order(date desc){
   _id,
   date,
   duration,
@@ -54,18 +56,24 @@ export default function HistoryPage() {
     }
   }
 
-  useEffect(() => {
-    fetchWorkouts()
-  }, [user?.id])
+  useFocusEffect(
+      useCallback(() => {
+        fetchWorkouts();
+      }, [user?.id])
+  );
 
-  useEffect(() => {
-    if (refresh === "true") {
-      fetchWorkouts()
-
-      // clear the refresh parameter from the rl
-      router.replace("/(app)/(tabs)/history")
-    }
-  }, [user?.id])
+  // useEffect(() => {
+  //   fetchWorkouts()
+  // }, [user?.id])
+  //
+  // useEffect(() => {
+  //   if (refresh === "true") {
+  //     fetchWorkouts()
+  //
+  //     // clear the refresh parameter from the rl
+  //     router.replace("/(app)/(tabs)/history")
+  //   }
+  // }, [user?.id])
 
   const onRefresh = () => {
     setRefreshing(true)
@@ -123,6 +131,7 @@ export default function HistoryPage() {
   }
   return (
       <SafeAreaView className="flex-1 bg-gray-50">
+        <StatusBar barStyle={"dark-content"}/>
         <View className="px-6 py-4 bg-white border-b border-gray-200">
           <Text className="text-2xl font-bold text-gray-900">Workout History</Text>
           <Text className="text-gray-600 mt-1">

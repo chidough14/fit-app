@@ -27,7 +27,7 @@ export default function ExerciseDetail() {
 
       try {
         const exerciseData = await client.fetch(singleExerciseQuery, {id})
-        //  console.log("exerciseData",exerciseData, urlFor(exerciseData.image?.asset?._ref).url() )
+        // console.log("exerciseData", exerciseData)
 
         setExercise(exerciseData)
       } catch (error) {
@@ -64,31 +64,6 @@ export default function ExerciseDetail() {
     } finally {
       setAiLoading(false)
     }
-
-    // try {
-    //   setAiLoading(true)
-    //   const response = await fetch("http://192.168.1.5:8081/api/ai", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify({exrerciseName: exercise.name})
-    //   })
-    //
-    //   console.log(response.ok)
-    //
-    //   if (!response.ok) {
-    //     throw new Error("Failed to fetch AI Guidance")
-    //   }
-    //
-    //   const data = await response.json()
-    //   setAiGuidance(data.message)
-    // } catch (error) {
-    //   console.error("Error fetchingg AI Guidance:", error)
-    //   setAiGuidance("Sorry, there was an error fetching AI Guidance")
-    // } finally {
-    //   setAiLoading(false)
-    // }
   }
 
 
