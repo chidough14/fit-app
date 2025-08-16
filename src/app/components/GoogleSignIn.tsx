@@ -2,14 +2,17 @@ import React, { useCallback, useEffect } from 'react'
 import * as WebBrowser from 'expo-web-browser'
 import * as AuthSession from 'expo-auth-session'
 import { useSSO } from '@clerk/clerk-expo'
-import { View, Button, Text, TouchableOpacity } from 'react-native'
+import { View, Button, Text, TouchableOpacity, Platform } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
 export const useWarmUpBrowser = () => {
   useEffect(() => {
     // Preloads the browser for Android devices to reduce authentication load time
     // See: https://docs.expo.dev/guides/authentication/#improving-user-experience
-    void WebBrowser.warmUpAsync()
+    // void WebBrowser.warmUpAsync()
+    if (Platform.OS === 'android') {
+      void WebBrowser.warmUpAsync();
+    }
     return () => {
       // Cleanup: closes browser when component unmounts
       void WebBrowser.coolDownAsync()
@@ -60,7 +63,7 @@ export default function GoogleSignIn() {
       onPress={onPress}
     >
       <View className='flex-row items-center justify-center'>
-        <Ionicons name='logo-google' size={20} color="#ea335"  />
+        <Ionicons name='logo-google' size={20} color="#ea335" />
         <Text className="text-gray-900 font-semibold text-lg ml-3">
           Continue with Google
         </Text>
